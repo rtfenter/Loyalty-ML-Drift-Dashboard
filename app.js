@@ -9,6 +9,60 @@ function safeParse(jsonText) {
   }
 }
 
+// Predefined drift scenarios
+const SCENARIOS = {
+  scenario1: {
+    // Example 1 – Partner + Promo Drift
+    v1: `{
+  "partnerId": "PartnerA",
+  "tier": "Gold",
+  "segment": "HighValue",
+  "promoCode": "SPRING10",
+  "campaignId": "CAMP123",
+  "score": 82,
+  "spend": 120,
+  "currency": "USD",
+  "category": "Electronics"
+}`,
+    v2: `{
+  "partnerId": "partner-a",
+  "tier": "Platinum",
+  "segment": "HighValue",
+  "promoCode": "SPRING20",
+  "campaignId": "CAMP123",
+  "score": 76,
+  "spend": 120,
+  "currency": "USD",
+  "category": "Electronics-Devices"
+}`
+  },
+  scenario2: {
+    // Example 2 – Tier + Category Drift, milder
+    v1: `{
+  "partnerId": "PartnerB",
+  "tier": "Silver",
+  "segment": "New",
+  "promoCode": "WELCOME5",
+  "campaignId": "CAMP200",
+  "score": 60,
+  "spend": 45,
+  "currency": "USD",
+  "category": "Grocery"
+}`,
+    v2: `{
+  "partnerId": "PartnerB",
+  "tier": "Gold",
+  "segment": "New",
+  "promoCode": "WELCOME5",
+  "campaignId": "CAMP200",
+  "score": 68,
+  "spend": 45,
+  "currency": "USD",
+  "category": "Grocery-Fresh"
+}`
+  }
+};
+
 // Fields we care about for drift (toy, extendable)
 const DRIFT_FIELDS = [
   "partnerId",
@@ -78,7 +132,6 @@ function formatResult(result) {
   lines.push("Drift Level: " + result.driftLevel);
   lines.push("Issue Count: " + result.issues.length);
 
-  // Very simple interpretation
   if (result.driftLevel === "High") {
     lines.push(
       "\nImpact: High — expect targeting, promo eligibility, or scoring to behave differently between these versions."
@@ -96,9 +149,40 @@ function formatResult(result) {
   return lines.join("\n");
 }
 
+// Wire up scenario selector
+const scenarioSelect = document.getElementById("scenarioSelect");
+const event1El = document.getElementById("event1");
+const event2El = document.getElementById("event2");
+const outputEl = document.getElementById("output");
+
+scenarioSelect.addEventListener("change", () => {
+  const key = scenarioSelect.value;
+
+  if (!key || !SCENARIOS[key]) {
+    event1El.value = "";
+    event2El.value = "";
+    outputEl.textContent =
+      'Select a scenario above and click "Check for Drift" to see the drift summary.';
+    return;
+  }
+
+  const scenario = SCENARIOS[key];
+  event1El.value = scenario.v1;
+  event2El.value = scenario.v2;
+  outputEl.textContent =
+    'Scenario loaded. Click "Check for Drift" to calculate drift.';
+});
+
+// Button handler
 document.getElementById("checkDriftBtn").addEventListener("click", () => {
-  const raw1 = document.getElementById("event1").value || "";
-  const raw2 = document.getElementById("event2").value || "";
+  const raw1 = event1El.value || "";
+  const raw2 = event2El.value || "";
+
+  if (!raw1 || !raw2) {
+    outputEl.textContent =
+      "Please select a scenario first. Events are empty.";
+    return;
+  }
 
   const parsed1 = safeParse(raw1);
   const parsed2 = safeParse(raw2);
@@ -107,11 +191,11 @@ document.getElementById("checkDriftBtn").addEventListener("click", () => {
     let msg = "Error parsing JSON:\n";
     if (!parsed1.ok) msg += "- Event v1: " + parsed1.error + "\n";
     if (!parsed2.ok) msg += "- Event v2: " + parsed2.error + "\n";
-    document.getElementById("output").textContent = msg.trim();
+    outputEl.textContent = msg.trim();
     return;
   }
 
   const result = compareEvents(parsed1.value, parsed2.value);
   const formatted = formatResult(result);
-  document.getElementById("output").textContent = formatted;
+  outputEl.textContent = formatted;
 });
