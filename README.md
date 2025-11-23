@@ -18,7 +18,6 @@ This dashboard exposes those shifts visually, making drift legible before it hit
 
 ---
 ## 🖼️ Demo Screenshot
-Here’s a quick look at the Loyalty Drift Dashboard in action:
 <img width="2910" height="1906" alt="Screenshot 2025-11-22 at 18-17-38 ML Drift Dashboard — Points   Promotions" src="https://github.com/user-attachments/assets/8d4884bc-328e-45d5-9a0c-1d49abd6d41f" />
 
 
