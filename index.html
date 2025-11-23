@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ML Drift Dashboard — Points & Promotions</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <h1>ML Drift Dashboard — Points & Promotions</h1>
+    <p class="subtitle">A tiny dashboard showing how inconsistent loyalty events create drift in targeting, promotions, partner classification, and scores.</p>
+
+    <!-- Event Inputs -->
+    <section class="input-section">
+        <h2>Compare Two Loyalty Events</h2>
+        
+        <textarea id="event1" placeholder="Paste Event v1 JSON here..."></textarea>
+        <textarea id="event2" placeholder="Paste Event v2 JSON here..."></textarea>
+
+        <button id="checkDriftBtn">Check for Drift</button>
+    </section>
+
+    <!-- Results -->
+    <section class="results">
+        <h2>Drift Summary</h2>
+        <div id="output" class="output-box">No drift calculated yet.</div>
+    </section>
+
+    <script src="app.js"></script>
+</body>
+</html>
