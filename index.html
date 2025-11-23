@@ -1,50 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ML Drift Dashboard — Points & Promotions</title>
-    <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8" />
+  <title>Loyalty Drift Dashboard — Points & Promotions</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
-    <h1>Loyalty Drift Dashboard — Points & Promotions</h1>
-    <p class="subtitle">
-        A tiny dashboard showing how inconsistent loyalty events create drift in targeting, promotions, partner classification, and scores.
-    </p>
+  <header class="page-header">
+    <div class="page-header-inner">
+      <h1>Loyalty Drift Dashboard — Points &amp; Promotions</h1>
+      <p class="tagline">
+        Visualize how small changes in loyalty events create drift in targeting, promotions, and scores.
+      </p>
+    </div>
+  </header>
 
-    <!-- Scenario Selector -->
-    <section class="input-section">
-        <h2>Select a Drift Scenario</h2>
+  <main class="main">
+    <!-- LEFT: SCENARIO + EVENTS -->
+    <section class="panel panel-input">
+      <div class="panel-header">
+        <h2>Scenario &amp; Events</h2>
+      </div>
 
-        <label for="scenarioSelect">Scenario:</label>
-        <select id="scenarioSelect">
-            <option value="">Choose an example...</option>
-            <option value="scenario1">Example 1 – Partner + Promo Drift</option>
-            <option value="scenario2">Example 2 – Tier + Category Drift</option>
+      <p class="help-text">
+        Select a drift scenario to load Event v1 and Event v2. Then click
+        <strong>Check for Drift</strong> to see how those changes propagate.
+      </p>
+
+      <div class="field">
+        <label for="scenarioSelect">Scenario</label>
+        <select id="scenarioSelect" class="select">
+          <option value="">Choose an example...</option>
+          <option value="scenario1">Example 1 – Partner + Promo Drift</option>
+          <option value="scenario2">Example 2 – Tier + Category Drift</option>
         </select>
+      </div>
 
-        <p class="hint">
-            Select a scenario to load Event v1 and Event v2, then click "Check for Drift".
-        </p>
+      <p class="hint">
+        Event v1 might represent yesterday’s event contract; Event v2, today’s.
+      </p>
 
-        <h2>Event v1</h2>
-        <textarea id="event1" readonly></textarea>
+      <div class="field">
+        <label for="event1">Event v1</label>
+        <textarea
+          id="event1"
+          class="event-textarea"
+          readonly
+          spellcheck="false"
+          rows="10"
+        ></textarea>
+      </div>
 
-        <h2>Event v2</h2>
-        <textarea id="event2" readonly></textarea>
+      <div class="field">
+        <label for="event2">Event v2</label>
+        <textarea
+          id="event2"
+          class="event-textarea"
+          readonly
+          spellcheck="false"
+          rows="10"
+        ></textarea>
+      </div>
 
-        <button id="checkDriftBtn">Check for Drift</button>
+      <div class="panel-footer">
+        <button id="checkDriftBtn" class="btn btn-primary">Check for Drift</button>
+        <span id="drift-status" class="parse-status" aria-live="polite">
+          Select a scenario to begin.
+        </span>
+      </div>
     </section>
 
-    <!-- Results -->
-    <section class="results">
+    <!-- RIGHT: DRIFT SUMMARY -->
+    <section class="panel panel-results">
+      <div class="panel-header">
         <h2>Drift Summary</h2>
-        <div id="output" class="output-box">
-            Select a scenario above and click "Check for Drift" to see the drift summary.
-        </div>
-    </section>
+      </div>
 
-    <script src="app.js"></script>
+      <div id="summary" class="summary">
+        <div class="summary-badge summary-badge-idle">
+          No drift check yet.
+        </div>
+      </div>
+
+      <div class="drift-grid">
+        <div class="drift-card">
+          <h3>Impact Level</h3>
+          <p id="impact-line" class="drift-line muted">
+            Run a drift check to see whether this change is low, medium, or high impact.
+          </p>
+        </div>
+
+        <div class="drift-card">
+          <h3>Field Changes</h3>
+          <p id="fields-line" class="drift-line muted">
+            Added, removed, and changed fields will appear here by category.
+          </p>
+        </div>
+
+        <div class="drift-card">
+          <h3>Targeting &amp; Promo Risk</h3>
+          <p id="targeting-line" class="drift-line muted">
+            See how partner IDs, tiers, and categories might shift behavior downstream.
+          </p>
+        </div>
+      </div>
+
+      <div class="flow-diagram">
+        <h3>Drift Flow Diagram</h3>
+        <pre>
+[Event v1: "before" state]          [Event v2: "after" state]
+           |                                   |
+           v                                   v
+     Field &amp; Value Comparison  ─────────►  Drift Detection
+           |                                   |
+           v                                   v
+   Targeting / Promo Engine             Score &amp; Segment Engine
+           |                                   |
+           v                                   v
+ Campaign Eligibility, Offers           Loyalty Scores &amp; Segments
+        </pre>
+      </div>
+
+      <div class="raw-output">
+        <h3>Raw Drift Report</h3>
+        <pre id="raw-output">Select a scenario and click "Check for Drift" to see detailed drift output.</pre>
+      </div>
+    </section>
+  </main>
+
+  <footer class="page-footer">
+    <p>
+      Part of the
+      <a href="https://github.com/rtfenter/loyalty-series" target="_blank" rel="noreferrer">
+        Loyalty Systems Series
+      </a>.
+    </p>
+  </footer>
+
+  <script src="app.js"></script>
 </body>
 </html>
