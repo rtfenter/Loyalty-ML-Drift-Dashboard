@@ -38,9 +38,6 @@ The first version will include:
 ## Demo Screenshot
 <img width="2696" height="1900" alt="Screenshot 2025-11-23 at 08-42-12 Loyalty Drift Dashboard — Points   Promotions" src="https://github.com/user-attachments/assets/6981715a-05ba-4843-b868-628fa2db3b24" />
 
-
-
-
 ---
 
 ## Drift Flow Diagram
@@ -67,16 +64,16 @@ The first version will include:
 
 Even though it's minimal, each step corresponds to real downstream engines:
 
-### Event Comparison
+### Event Comparison  
 Loyalty systems rely on stable, consistent events. Schema drift or inconsistent values break attribution, rules, and targeting.
 
-### Targeting Engine
+### Targeting Engine  
 Promotions and campaigns depend on partner, tier, category, and spend fields. Any drift affects eligibility and segmentation.
 
-### Partner Classification
+### Partner Classification  
 If the partner field changes (e.g., “PartnerA” → “Partner A”), promotions may fail silently or classify incorrectly.
 
-### Score / Segment Stability
+### Score / Segment Stability  
 Drift in key inputs leads to unstable scoring, incorrect tier assignment, and mismatched customer experiences.
 
 This tool is a small, legible model of those real-world behaviors.
@@ -86,7 +83,7 @@ This tool is a small, legible model of those real-world behaviors.
 ## Part of the Loyalty Systems Series
 
 Main repo:  
-https://github.com/rtfenter/loyalty-series
+https://github.com/rtfenter/Loyalty-Systems-Series
 
 ---
 
